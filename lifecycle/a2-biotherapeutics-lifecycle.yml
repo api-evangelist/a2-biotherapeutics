@@ -1,0 +1,52 @@
+generated: '2026-08-02'
+method: derived
+source: >-
+  Live probes of https://www.a2bio.com/ and https://www.a2bio.com/wp-json/ on 2026-08-02
+summary: >-
+  A2 Biotherapeutics is a clinical-stage biotechnology company and does not run an API programme.
+  There is no developer portal, no published versioning policy, no deprecation policy, no SLA and no
+  status page. What follows records the observable lifecycle posture of the one live API surface —
+  the WordPress REST API on the corporate site — and the negative results are as much the finding as
+  the positive ones.
+versioning:
+  scheme: uri-path-namespace
+  current: wp/v2
+  policy_url: null
+  detail: >-
+    Version is carried in the namespace segment. The site advertises 16 namespaces, each versioned
+    independently: wp/v2, wp-abilities/v1, oembed/1.0, wp-site-health/v1, wp-block-editor/v1, plus
+    plugin namespaces. The `mcp` namespace is unversioned. No provider-published versioning policy
+    exists; these are WordPress platform conventions.
+deprecation:
+  policy_url: null
+  sunset_header: false
+  deprecation_header: false
+  detail: >-
+    No RFC 8594 Sunset or Deprecation headers were observed on any response, and the provider
+    publishes no deprecation policy.
+deprecated_operations: []
+sla:
+  url: null
+  uptime_target: null
+status_page: null
+status_page_probes:
+  - {host: 'https://status.a2bio.com/', result: NXDOMAIN}
+  - {host: 'https://trust.a2bio.com/', result: NXDOMAIN}
+changelog:
+  url: null
+  detail: >-
+    No API changelog. The company's Newsroom (https://www.a2bio.com/newsroom/) is a corporate press
+    release feed with an RSS endpoint at https://www.a2bio.com/feed/, not a release-notes surface.
+support:
+  developer_support: null
+  general_contact: https://www.a2bio.com/contact-us/
+  media_inquiries: https://www.a2bio.com/newsroom/media-inquiries/
+  detail: No developer support channel of any kind — no forum, no community, no support email for API use.
+company_stage:
+  status: active
+  detail: >-
+    Clinical-stage; the newsroom carried a press release dated 2026-05-21 reporting efficacy data
+    from the EVEREST-2 clinical study, so the company and the site are actively maintained.
+  evidence: 'https://www.a2bio.com/wp-json/wp/v2/posts (HTTP 200, 28 posts, most recent 2026-05-21)'
+x-evidence:
+  fetched: '2026-08-02'

@@ -1,0 +1,30 @@
+generated: '2026-08-02'
+method: generated
+source: openapi/a2-biotherapeutics-wp-rest-openapi.yml
+note: >-
+  A2 Biotherapeutics publishes no product API, so these skills are grounded in the only live contract
+  it operates — the WordPress REST API of its corporate site. Every operationId referenced was
+  verified against openapi/a2-biotherapeutics-wp-rest-openapi.yml. Both skills lead with the
+  provider's published Content Signals reservation of rights.
+skills:
+  - file: a2-biotherapeutics-read-newsroom.md
+    name: Read the A2 Biotherapeutics newsroom
+    description: >-
+      Retrieve corporate press releases, including clinical trial readouts, with correct pagination
+      and payload trimming.
+    api: openapi/a2-biotherapeutics-wp-rest-openapi.yml
+    operations: [getWpV2Posts, getWpV2PostsById, getWpV2Categories, getWpV2Media]
+  - file: a2-biotherapeutics-discover-surface.md
+    name: Discover the A2 Biotherapeutics API and MCP surface
+    description: >-
+      Enumerate the REST route-discovery document, the site page inventory, and the two OAuth-gated
+      MCP servers, and establish what is anonymous versus authorized.
+    api: openapi/a2-biotherapeutics-wp-rest-openapi.yml
+    operations:
+      - get
+      - getWpV2Pages
+      - getWpV2Types
+      - getWpV2Taxonomies
+      - getMcp
+      - postMcpMcpOauthServer
+      - getWpAbilitiesV1Abilities

@@ -1,0 +1,123 @@
+generated: '2026-08-02'
+method: derived
+source: >-
+  openapi/a2-biotherapeutics-wp-rest-openapi.yml, well-known/a2-biotherapeutics-well-known.yml,
+  mcp/a2-biotherapeutics-mcp.yml, and live probes on 2026-08-02
+summary: >-
+  Cross-cutting standards posture of the A2 Biotherapeutics corporate web/API surface. Note the split:
+  the technical standards below are inherited from WordPress and Cloudflare rather than authored by
+  A2 Bio, while the regulatory compliance programme at the bottom is a genuine, published,
+  company-authored commitment.
+standards:
+  - id: oauth2
+    conforms: true
+    evidence: >-
+      OAuth 2.1 authorization server advertised at /.well-known/oauth-authorization-server (HTTP 200)
+      with authorization_code + refresh_token grants and response_types_supported ["code"].
+  - id: rfc8414-oauth-authorization-server-metadata
+    conforms: true
+    evidence: 'https://www.a2bio.com/.well-known/oauth-authorization-server returned 200 application/json'
+  - id: rfc9728-oauth-protected-resource-metadata
+    conforms: true
+    evidence: >-
+      https://www.a2bio.com/.well-known/oauth-protected-resource returned 200 naming
+      https://www.a2bio.com/wp-json/mcp/mcp-oauth-server; the 401 from that resource carries a
+      matching WWW-Authenticate Bearer challenge with resource_metadata.
+  - id: rfc7636-pkce
+    conforms: true
+    evidence: 'code_challenge_methods_supported: ["S256"]'
+  - id: oauth-client-id-metadata-document
+    conforms: true
+    evidence: 'client_id_metadata_document_supported: true (no dynamic client registration endpoint advertised)'
+  - id: mcp-model-context-protocol
+    conforms: true
+    evidence: >-
+      Two live MCP servers under the `mcp` REST namespace; both answer JSON-RPC over HTTP and both
+      returned an authenticated-only 401 to tools/list.
+    caveat: >-
+      Protocol version could not be confirmed — initialize/tools-list are auth-gated, so conformance
+      is asserted from the endpoint contract and OAuth metadata, not from a handshake.
+  - id: oidc
+    conforms: false
+    evidence: '/.well-known/openid-configuration returned 404'
+  - id: rfc9457-problem-details
+    conforms: false
+    evidence: >-
+      Errors use the WordPress envelope {code, message, data.status} with content-type
+      application/json, not application/problem+json.
+  - id: rfc9116-security-txt
+    conforms: false
+    evidence: '/.well-known/security.txt returned 404 on both www.a2bio.com and a2bio.com'
+  - id: rfc9727-api-catalog
+    conforms: false
+    evidence: '/.well-known/api-catalog returned 404'
+  - id: a2a-agent-card
+    conforms: false
+    evidence: >-
+      /.well-known/agent-card.json and /.well-known/agent.json both returned 404; the site serves an
+      HTML 404 page rather than a catch-all 200, so this is a true negative.
+  - id: rfc8288-web-linking
+    conforms: true
+    evidence: 'Link: <...page=2>; rel="next" on paginated wp/v2 collections'
+  - id: rfc8594-sunset-header
+    conforms: false
+    evidence: No Sunset or Deprecation header observed on any response.
+  - id: openapi
+    conforms: false
+    evidence: >-
+      The provider publishes no OpenAPI. /openapi.json, /openapi.yaml, /swagger.json, /api-docs and
+      /redoc all returned 404 on www.a2bio.com, and api.a2bio.com does not resolve. The spec in
+      openapi/ is derived by API Evangelist from the live WordPress route-discovery document.
+  - id: graphql
+    conforms: false
+    evidence: '/graphql returned 404'
+  - id: asyncapi
+    conforms: false
+    evidence: No event, streaming or webhook surface is published or advertised.
+  - id: content-signals-policy
+    conforms: true
+    evidence: >-
+      robots.txt carries a Content Signals Policy block — search=yes, ai-train=no, use=reference —
+      declared as an express reservation of rights under Article 4 of EU Directive 2019/790, plus
+      named Disallow rules for GPTBot, ClaudeBot, Google-Extended, Amazonbot, Applebot-Extended and
+      meta-externalagent. Cloudflare-managed but served from the provider's host.
+  - id: hsts
+    conforms: true
+    evidence: 'strict-transport-security: max-age=15768000; includeSubDomains'
+  - id: tls-1-3
+    conforms: true
+    evidence: TLSv1.3 negotiated on www.a2bio.com (see security/a2-biotherapeutics-domain-security.yml)
+  - id: dnssec
+    conforms: false
+    evidence: No DNSSEC on a2bio.com (probed).
+  - id: caa
+    conforms: false
+    evidence: No CAA records on a2bio.com (probed).
+  - id: dmarc
+    conforms: true
+    evidence: 'DMARC present with policy p=reject on a2bio.com (probed).'
+regulatory_compliance:
+  published: true
+  url: https://www.a2bio.com/california-compliance/
+  detail: >-
+    A2 Biotherapeutics publishes a Compliance Summary and Declaration covering its life-sciences
+    compliance programme. This is a company-authored regulatory commitment, distinct from the
+    technical standards above.
+  programs:
+    - id: oig-compliance-program-guidance
+      name: >-
+        U.S. Department of Health and Human Services Office of Inspector General — Compliance Program
+        Guidance for Pharmaceutical Manufacturers
+      conforms: true
+    - id: california-health-and-safety-code-119400-119402
+      name: California Health and Safety Code §§119400–119402
+      conforms: true
+      note: Includes a declared California annual spend limit on interactions with healthcare professionals.
+    - id: advamed-code-of-ethics
+      name: AdvaMed Code of Ethics on Interactions with Healthcare Professionals
+      conforms: true
+  security_certifications: []
+  security_certifications_note: >-
+    No SOC 2, ISO 27001, HIPAA, PCI DSS or FedRAMP attestation is published, and no trust centre
+    exists (trust.a2bio.com does not resolve). The compliance programme above is pharmaceutical-sector
+    regulatory compliance, not an information-security certification.

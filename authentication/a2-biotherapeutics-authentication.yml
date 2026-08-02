@@ -1,0 +1,33 @@
+generated: '2026-08-02'
+method: derived
+source: openapi/a2-biotherapeutics-wp-rest-openapi.yml
+summary:
+  types:
+  - apiKey
+  - oauth2
+  api_key_in:
+  - header
+  oauth2_flows:
+  - authorizationCode
+schemes:
+- name: mcpOAuth2
+  type: oauth2
+  flows:
+  - flow: authorizationCode
+    authorizationUrl: https://www.a2bio.com/oauth/authorize
+    tokenUrl: https://www.a2bio.com/oauth/token
+    scopes: 1
+  description: OAuth 2.1 authorization-code + PKCE, as advertised by the provider's RFC 8414
+    metadata at https://www.a2bio.com/.well-known/oauth-authorization-server (fetched 2026-08-02,
+    HTTP 200). Guards the `mcp` namespace; the protected-resource metadata (RFC 9728) names
+    https://www.a2bio.com/wp-json/mcp/mcp-oauth-server.
+  sources:
+  - openapi/a2-biotherapeutics-wp-rest-openapi.yml
+- name: wpNonce
+  type: apiKey
+  in: header
+  parameter: X-WP-Nonce
+  description: WordPress cookie-authentication nonce. Advertised by the live server in its Access-Control-Allow-Headers
+    response header (Authorization, X-WP-Nonce, Content-Disposition, Content-MD5, Content-Type).
+  sources:
+  - openapi/a2-biotherapeutics-wp-rest-openapi.yml

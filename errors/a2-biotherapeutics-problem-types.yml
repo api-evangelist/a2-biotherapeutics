@@ -1,0 +1,79 @@
+generated: '2026-08-02'
+method: derived
+source: >-
+  Live error responses observed on https://www.a2bio.com/wp-json/ during the 2026-08-02 enrichment
+  pass, plus openapi/a2-biotherapeutics-wp-rest-openapi.yml
+format: wordpress-rest
+rfc9457: false
+envelope:
+  content_type: application/json
+  shape: '{"code": "<string>", "message": "<string>", "data": {"status": <integer>}}'
+  note: >-
+    The WordPress REST error envelope. It is NOT RFC 9457 application/problem+json — there is no
+    `type` URI, no `instance`, no `detail` field, and no published problem-type registry. `code` is
+    the stable machine-readable discriminator; `message` is human prose and may be localised.
+problems:
+  - status: 401
+    code: mcp_unauthorized
+    title: MCP authentication required
+    detail: >-
+      Returned by the OAuth-guarded MCP server for any request without a valid bearer token. The
+      response carries a correct RFC 9728 challenge —
+      WWW-Authenticate: Bearer realm="https://www.a2bio.com",
+      resource_metadata="https://www.a2bio.com/.well-known/oauth-protected-resource".
+    remediation: >-
+      Complete the OAuth 2.1 authorization-code + PKCE flow at
+      https://www.a2bio.com/oauth/authorize requesting scope `mcp`, then resend with an
+      Authorization: Bearer header.
+    observed_at: https://www.a2bio.com/wp-json/mcp/mcp-oauth-server
+    method: probed
+  - status: 401
+    code: rest_forbidden
+    title: Sorry, you are not allowed to do that
+    detail: >-
+      WordPress capability check failure. Returned for privileged reads by an unauthenticated or
+      under-privileged caller.
+    remediation: >-
+      Authenticate with a WordPress session (cookie + X-WP-Nonce) or an application credential
+      holding the required capability.
+    observed_at: >-
+      https://www.a2bio.com/wp-json/wp-abilities/v1/abilities,
+      https://www.a2bio.com/wp-json/mcp/mcp-adapter-default-server
+    method: probed
+  - status: 404
+    code: rest_no_route
+    title: No route was found matching the URL and request method
+    detail: >-
+      Standard WordPress REST 404 for an unmatched route. Note that unmatched paths OUTSIDE /wp-json
+      (for example /openapi.json, /.well-known/security.txt, /graphql) are served the site's HTML 404
+      page with an HTTP 404 status, not a JSON envelope — a caller must not assume JSON on 404.
+    remediation: Consult the route-discovery document at https://www.a2bio.com/wp-json/.
+    method: derived
+  - status: 404
+    code: rest_post_invalid_id
+    title: Invalid post ID
+    detail: Item route addressed with an id that does not exist or is not visible to the caller.
+    method: derived
+    source_operation: openapi/a2-biotherapeutics-wp-rest-openapi.yml#getWpV2PostsByid
+  - status: 400
+    code: rest_invalid_param
+    title: Invalid parameter
+    detail: >-
+      A query parameter or body property failed the schema published in the route-discovery document
+      (type, enum, minimum/maximum, or required). `data.params` names the offending parameters.
+    remediation: >-
+      Validate against the parameter schemas in
+      openapi/a2-biotherapeutics-wp-rest-openapi.yml, which are derived verbatim from the live
+      discovery document.
+    method: derived
+  - status: 403
+    code: rest_cookie_invalid_nonce
+    title: Cookie check failed
+    detail: Cookie-authenticated write sent without a valid X-WP-Nonce header.
+    method: derived
+coverage_note: >-
+  The derived OpenAPI declares 401 and 404 responses on all 292 operations because those were the
+  statuses observed live and are the WordPress core contract. The provider publishes no error
+  reference page, so no richer catalogue exists to harvest; 400/403 entries above are the documented
+  WordPress core codes for the validation and nonce paths this surface exposes, marked derived rather
+  than probed because they were not directly triggered during this pass.

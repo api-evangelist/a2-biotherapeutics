@@ -1,0 +1,66 @@
+generated: '2026-08-02'
+method: derived
+source: mcp/a2-biotherapeutics-mcp.yml + openapi/a2-biotherapeutics-wp-rest-openapi.yml
+summary: >-
+  A2 Biotherapeutics runs two live MCP servers and a live REST surface on the same WordPress host, so
+  the crosswalk is emitted. It is deliberately empty on the tool side: both MCP servers answer
+  tools/list with HTTP 401, the WordPress Abilities registry the adapter projects into tools is also
+  401, and the provider publishes no llms.txt or tool documentation. No tool name was ever observed,
+  so no row can be bound without inventing one. What IS recorded is the surface topology, the
+  auth-gating that blocks enumeration, and the REST operations that exist with no known tool.
+surfaces:
+  openapi:
+    file: openapi/a2-biotherapeutics-wp-rest-openapi.yml
+    source: https://www.a2bio.com/wp-json/
+    gated: false
+    note: >-
+      Route discovery is anonymous (HTTP 200). Read operations on public content (wp/v2 posts, pages,
+      media, taxonomies) are anonymous; write operations and privileged reads are capability-gated.
+  graphql:
+    endpoint: null
+    note: No GraphQL surface. https://www.a2bio.com/graphql returned HTTP 404.
+  mcp:
+    endpoints:
+      - https://www.a2bio.com/wp-json/mcp/mcp-oauth-server
+      - https://www.a2bio.com/wp-json/mcp/mcp-adapter-default-server
+    gated: true
+    note: >-
+      Both return HTTP 401 to an anonymous tools/list. The OAuth server requires the `mcp` scope via
+      authorization_code + PKCE. Tool input schemas require authenticated introspection.
+crosswalk: []
+mcp_only: []
+rest_only:
+  - capability: WordPress core content (wp/v2)
+    operations: 270
+    note: >-
+      Posts, pages, media, blocks, templates, taxonomies (categories, tags), comments, users,
+      settings, menus, navigation, plugins, themes, search and revisions. Public read on published
+      content; the rest capability-gated.
+  - capability: WordPress Abilities API (wp-abilities/v1)
+    operations: 10
+    note: >-
+      Ability registry plus categories plus an /abilities/{name}/run executor. This is the surface an
+      MCP tool would most plausibly bind to, but the registry read is 401 so the ability names — and
+      therefore the tool names — are unknown.
+  - capability: MCP transport (mcp)
+    operations: 7
+    note: The MCP JSON-RPC endpoints themselves, reachable but auth-gated.
+  - capability: oEmbed (oembed/1.0)
+    operations: 3
+  - capability: REST index / namespace discovery
+    operations: 2
+coverage:
+  tools_named: 0
+  tools_bound: 0
+  mcp_only: 0
+  rest_operations_total: 292
+  rest_operations_with_tool: 0
+  blocked_by: auth-gated tools/list on both MCP servers and on the abilities registry
+x-evidence:
+  fetched: '2026-08-02'
+  probes:
+    - {url: 'https://www.a2bio.com/wp-json/mcp/mcp-oauth-server', method: POST, http_status: 401}
+    - {url: 'https://www.a2bio.com/wp-json/mcp/mcp-adapter-default-server', method: POST, http_status: 401}
+    - {url: 'https://www.a2bio.com/wp-json/wp-abilities/v1/abilities', method: GET, http_status: 401}
+    - {url: 'https://www.a2bio.com/graphql', method: GET, http_status: 404}
+    - {url: 'https://www.a2bio.com/llms.txt', method: GET, http_status: 404}

@@ -1,0 +1,67 @@
+generated: '2026-08-02'
+method: searched
+source: https://www.a2bio.com/.well-known/
+host: https://www.a2bio.com
+note: >-
+  A2 Biotherapeutics is a clinical-stage cell-therapy company with no developer product API. The
+  /.well-known/ surface below belongs to the corporate WordPress site (www.a2bio.com), which runs a
+  WordPress MCP adapter. The two OAuth metadata documents are anonymous 200s and describe the OAuth
+  2.1 authorization server that guards the site's Model Context Protocol endpoint. Every status below
+  was observed live on 2026-08-02.
+documents:
+  - path: /.well-known/oauth-authorization-server   # RFC 8414
+    status: 200
+    content_type: application/json
+    file: a2-biotherapeutics-oauth-authorization-server.json
+    note: >-
+      Advertises authorization_code + refresh_token grants, PKCE S256, a single scope `mcp`,
+      token_endpoint_auth_methods_supported ["none"] (public client), and
+      client_id_metadata_document_supported true.
+  - path: /.well-known/oauth-protected-resource     # RFC 9728
+    status: 200
+    content_type: application/json
+    file: a2-biotherapeutics-oauth-protected-resource.json
+    note: >-
+      Names the protected resource https://www.a2bio.com/wp-json/mcp/mcp-oauth-server with
+      bearer_methods_supported ["header"] and scope `mcp`.
+  - path: /.well-known/security.txt                 # RFC 9116
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/api-catalog                  # RFC 9727
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/agent-card.json              # A2A 1.0.0
+    status: 404
+  - path: /.well-known/agent.json                   # A2A pre-0.3 legacy
+    status: 404
+  - path: /.well-known/mcp
+    status: 404
+other:
+  - path: /robots.txt
+    status: 200
+    file: a2-biotherapeutics-robots.txt
+    kind: ContentSignal
+    note: >-
+      Carries a Cloudflare-managed Content Signals Policy block. The site-wide signal is
+      `Content-Signal: search=yes,ai-train=no,use=reference` — an express reservation of rights under
+      Article 4 of EU Directive 2019/790. The same file Disallows a named list of AI crawlers
+      including GPTBot, ClaudeBot, Google-Extended, Amazonbot, Applebot-Extended and
+      meta-externalagent. Captured verbatim; this is the provider's published AI-access posture.
+  - path: /sitemap.xml
+    status: 200
+    note: Static xml-sitemaps.com export, last modified 2022-01-07; does not reflect current pages.
+  - path: /wp-json/
+    status: 200
+    kind: RESTDiscovery
+    note: >-
+      The WordPress REST API route-discovery document — 298 routes across 16 namespaces. Harvested
+      verbatim to openapi/a2-biotherapeutics-wp-rest-discovery-original.json and derived into
+      openapi/a2-biotherapeutics-wp-rest-openapi.yml.
+x-evidence:
+  fetched: '2026-08-02'
+  probe_hosts:
+    - www.a2bio.com
+    - a2bio.com
+    - api.a2bio.com   # DNS does not resolve

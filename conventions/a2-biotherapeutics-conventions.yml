@@ -1,0 +1,101 @@
+generated: '2026-08-02'
+method: derived
+source: >-
+  Live probes of https://www.a2bio.com/wp-json/ (route discovery, response headers) plus
+  openapi/a2-biotherapeutics-wp-rest-openapi.yml
+summary: >-
+  Cross-cutting request/response semantics of the only live API surface A2 Biotherapeutics operates —
+  the WordPress REST API on its corporate site. These are WordPress core conventions, observed on the
+  provider's own host rather than assumed from the platform; each entry below cites the live evidence
+  that established it. A2 Bio publishes no developer documentation for this surface, so nothing here
+  is a documented provider contract and callers should treat it as observed behaviour.
+authentication:
+  style: none-for-public-reads
+  detail: >-
+    Published content under wp/v2 is readable anonymously. Privileged reads and all writes are
+    capability-gated. Two mechanisms are advertised: an OAuth 2.1 bearer token scoped `mcp` for the
+    MCP namespace, and the WordPress cookie + X-WP-Nonce scheme for browser sessions.
+  headers_advertised: [Authorization, X-WP-Nonce]
+  evidence: 'access-control-allow-headers on https://www.a2bio.com/wp-json/wp/v2/posts'
+  see_also: authentication/a2-biotherapeutics-authentication.yml
+idempotency:
+  supported: false
+  header: null
+  detail: >-
+    No idempotency-key header, parameter or documented retry contract exists anywhere in the 292
+    operations of the derived spec, and WordPress core ships none. Writes are not safe to retry
+    blindly.
+pagination:
+  style: page-number
+  request_params:
+    page: 1-based page index, integer, default 1
+    per_page: page size, integer, default 10, maximum 100
+    offset: alternative absolute offset, integer
+  response_headers:
+    X-WP-Total: total number of matching records
+    X-WP-TotalPages: total number of pages
+    Link: 'RFC 8288 rel="next" / rel="prev" cursor links'
+  evidence: >-
+    Observed live on https://www.a2bio.com/wp-json/wp/v2/posts?per_page=1 — x-wp-total: 28,
+    x-wp-totalpages: 28, link: <...page=2>; rel="next", and
+    access-control-expose-headers: X-WP-Total, X-WP-TotalPages, Link
+field_selection:
+  supported: true
+  param: _fields
+  detail: >-
+    Comma-separated sparse-fieldset selector accepted on every wp/v2 collection and item route.
+    A companion `_embed` parameter inlines linked resources named in the _links envelope.
+  evidence: Used successfully against wp/v2/pages and wp/v2/media during this pass.
+hypermedia:
+  supported: true
+  detail: >-
+    Every resource carries a `_links` object (HAL-flavoured, not HAL-compliant) with self, collection,
+    about, author, replies, and wp:* relations. The API root advertises its namespaces in a
+    `namespaces` array and every route in a `routes` map — this is the discovery contract.
+  evidence: 'https://www.a2bio.com/wp-json/ returned 298 routes across 16 namespaces (HTTP 200)'
+filtering_and_search:
+  params: [search, include, exclude, slug, status, after, before, modified_after, modified_before, order, orderby]
+  detail: Standard WordPress collection filters; 27 query parameters on wp/v2/posts alone.
+versioning:
+  scheme: uri-path-namespace
+  current: wp/v2
+  detail: >-
+    Version lives in the namespace segment (`/wp-json/wp/v2/...`). Plugin namespaces carry their own
+    independent versions (wp-abilities/v1, oembed/1.0, mcp — the MCP namespace is unversioned).
+  see_also: lifecycle/a2-biotherapeutics-lifecycle.yml
+error_envelope:
+  format: wordpress-rest
+  rfc9457: false
+  shape: '{"code": "<machine_code>", "message": "<human message>", "data": {"status": <http_status>}}'
+  content_type: application/json
+  detail: >-
+    Not application/problem+json. There is no `type` URI, no `instance`, and no problem-type registry.
+  see_also: errors/a2-biotherapeutics-problem-types.yml
+rate_limiting:
+  signalled: false
+  detail: >-
+    No RateLimit-* / X-RateLimit-* headers and no Retry-After were observed on any anonymous response.
+    Cloudflare sits in front of the origin and may apply undocumented edge throttling, but the API
+    signals no budget to callers.
+request_tracing:
+  request_id_header: null
+  detail: >-
+    No request-id header. Cloudflare `cf-ray` is present on every response and is the only
+    correlatable identifier, but it is an edge artifact, not an API contract.
+  observed: 'cf-ray, report-to, nel (Cloudflare Network Error Logging)'
+caching:
+  detail: >-
+    REST responses are sent no-cache, must-revalidate, max-age=0, no-store, private with
+    cf-cache-status: DYNAMIC. HTML pages are cached at the edge.
+transport_security:
+  https_only: true
+  hsts: true
+  hsts_max_age: 15768000
+  see_also: security/a2-biotherapeutics-domain-security.yml
+agent_access_posture:
+  detail: >-
+    robots.txt carries a Cloudflare-managed Content Signals Policy — search=yes, ai-train=no,
+    use=reference — and explicitly Disallows GPTBot, ClaudeBot, Google-Extended, Amazonbot,
+    Applebot-Extended, CloudflareBrowserRenderingCrawler and meta-externalagent. An agent consuming
+    this API should honour that reservation of rights.
+  see_also: well-known/a2-biotherapeutics-robots.txt

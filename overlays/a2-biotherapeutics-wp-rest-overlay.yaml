@@ -1,0 +1,75 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for the A2 Biotherapeutics WordPress REST API
+  version: 1.0.0
+extends: openapi/a2-biotherapeutics-wp-rest-openapi.yml
+x-generated: '2026-08-02'
+x-method: generated
+x-source: >-
+  API Evangelist enrichment pass 2026-08-02. Captures our annotations on top of the derived spec so
+  the derived document itself stays a faithful projection of the provider's live route-discovery
+  output.
+actions:
+  - target: $.info
+    update:
+      x-apievangelist-enriched: '2026-08-02'
+      x-apievangelist-surface-class: corporate-cms
+      x-apievangelist-provider-type: clinical-stage-biotechnology
+      x-apievangelist-note: >-
+        A2 Biotherapeutics publishes no developer product API. This contract is the WordPress REST API
+        of its corporate marketing site, derived from the live /wp-json/ discovery document. It is
+        catalogued because it is a real, self-describing, provider-hosted HTTP surface that also
+        fronts two Model Context Protocol servers.
+      x-apievangelist-artifacts:
+        conventions: conventions/a2-biotherapeutics-conventions.yml
+        errors: errors/a2-biotherapeutics-problem-types.yml
+        authentication: authentication/a2-biotherapeutics-authentication.yml
+        scopes: scopes/a2-biotherapeutics-scopes.yml
+        mcp: mcp/a2-biotherapeutics-mcp.yml
+        crosswalk: mcp/a2-biotherapeutics-tool-crosswalk.yml
+        data_model: data-model/a2-biotherapeutics-data-model.yml
+        lifecycle: lifecycle/a2-biotherapeutics-lifecycle.yml
+        conformance: conformance/a2-biotherapeutics-conformance.yml
+        well_known: well-known/a2-biotherapeutics-well-known.yml
+  - target: $.info
+    update:
+      contact:
+        name: A2 Biotherapeutics
+        url: https://www.a2bio.com/contact-us/
+      termsOfService: https://www.a2bio.com/terms-of-use/
+      license:
+        name: Proprietary — see Terms of Use
+        url: https://www.a2bio.com/terms-of-use/
+  - target: $
+    update:
+      x-agent-access-posture:
+        content_signal: search=yes,ai-train=no,use=reference
+        source: https://www.a2bio.com/robots.txt
+        disallowed_agents: [GPTBot, ClaudeBot, Google-Extended, Amazonbot, Applebot-Extended, CloudflareBrowserRenderingCrawler, meta-externalagent]
+        note: >-
+          The provider expressly reserves rights under Article 4 of EU Directive 2019/790. Agents must
+          honour this before consuming any operation in this contract.
+  - target: $.paths['/wp-json/wp/v2/posts'].get
+    update:
+      x-apievangelist-use-case: >-
+        The corporate newsroom feed — press releases including clinical trial readouts. The only
+        substantive public data this API exposes. Paginate with page/per_page and read X-WP-Total /
+        X-WP-TotalPages; narrow the payload with _fields.
+  - target: $.paths['/wp-json/wp/v2/pages'].get
+    update:
+      x-apievangelist-use-case: >-
+        Site page inventory — science, pipeline, clinical trials, leadership, and the legal and
+        compliance pages. Address individual pages with the `slug` filter.
+  - target: $.paths['/wp-json/mcp/mcp-oauth-server'].post
+    update:
+      x-apievangelist-note: >-
+        Live MCP JSON-RPC endpoint. Anonymous tools/list returns HTTP 401 with a correct RFC 9728
+        Bearer challenge; the tool set requires the `mcp` scope via authorization_code + PKCE.
+      security:
+        - mcpOAuth2: [mcp]
+  - target: $.paths['/wp-json/wp-abilities/v1/abilities'].get
+    update:
+      x-apievangelist-note: >-
+        WordPress Abilities registry — the surface MCP tools are projected from. Gated (HTTP 401
+        anonymously), so the ability names and input schemas behind the MCP servers are not publicly
+        discoverable.

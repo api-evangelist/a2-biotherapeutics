@@ -1,0 +1,104 @@
+generated: '2026-08-02'
+method: derived
+source: openapi/a2-biotherapeutics-wp-rest-openapi.yml
+summary: >-
+  Entity-relationship graph of the A2 Biotherapeutics corporate content API, derived from the route
+  topology and id-reference parameters in the live WordPress route-discovery document. Entities are
+  WordPress core content types; the relationships were read from the reference parameters the live
+  server publishes on each route (author, parent, post, categories, tags, featured_media), not
+  assumed. This is a marketing-site content model, not a clinical, patient or research data model —
+  A2 Bio exposes no such data over any API.
+entities:
+  - name: post
+    route: /wp-json/wp/v2/posts
+    id: integer
+    description: >-
+      Corporate press releases and newsroom items. 28 records live as of 2026-08-02, most recent
+      2026-05-21 (EVEREST-2 clinical study efficacy data).
+    key_fields: [id, date, date_gmt, modified, slug, status, link, title, content, excerpt, author, featured_media, categories, tags]
+  - name: page
+    route: /wp-json/wp/v2/pages
+    id: integer
+    description: >-
+      Static site pages. 26 records live: Home, Science (Technology Platform, Manufacturing, Abstracts
+      and Publications, Presentations, Posters), Pipeline, Clinical Trials, About Us (Leadership,
+      Board of Directors, Advisory Board, CAB, Investors, Partners), Newsroom (Archives, Media
+      Inquiries), Careers, Contact, and the legal set (Privacy Policy, Terms of Use, Cookies, Social
+      Media, California Compliance).
+    key_fields: [id, slug, link, title, content, parent, menu_order, template]
+  - name: media
+    route: /wp-json/wp/v2/media
+    id: integer
+    description: Uploaded assets — logos, scientific figures, poster and presentation images.
+    key_fields: [id, slug, source_url, mime_type, media_type, media_details, alt_text, post]
+  - name: user
+    route: /wp-json/wp/v2/users
+    id: integer
+    description: Authoring identities. Anonymous read is limited to users with published content.
+    key_fields: [id, name, slug, description, avatar_urls]
+  - name: category
+    route: /wp-json/wp/v2/categories
+    id: integer
+    description: Post taxonomy term.
+    key_fields: [id, name, slug, parent, count, taxonomy]
+  - name: tag
+    route: /wp-json/wp/v2/tags
+    id: integer
+    description: Post taxonomy term (non-hierarchical).
+    key_fields: [id, name, slug, count, taxonomy]
+  - name: comment
+    route: /wp-json/wp/v2/comments
+    id: integer
+    description: Comment thread records. No comments are surfaced on the public site.
+    key_fields: [id, post, parent, author, content, status]
+  - name: taxonomy
+    route: /wp-json/wp/v2/taxonomies
+    id: string
+    description: Taxonomy definitions (category, post_tag, nav_menu).
+  - name: type
+    route: /wp-json/wp/v2/types
+    id: string
+    description: Registered post-type definitions.
+  - name: menu
+    route: /wp-json/wp/v2/menus
+    id: integer
+    description: Navigation menus; menu items live at /wp-json/wp/v2/menu-items.
+  - name: ability
+    route: /wp-json/wp-abilities/v1/abilities
+    id: string
+    description: >-
+      WordPress Abilities API registry entry — the named unit an MCP tool binds to. Read access
+      returned HTTP 401 anonymously, so no ability names or input schemas could be observed.
+    key_fields: [name, label, description, category, input_schema, output_schema]
+    gated: true
+  - name: ability_category
+    route: /wp-json/wp-abilities/v1/categories
+    id: string
+    description: Grouping for abilities. Also gated (HTTP 401).
+    gated: true
+relationships:
+  - {from: post, to: user, kind: belongs_to, via: author}
+  - {from: post, to: media, kind: has_one, via: featured_media}
+  - {from: post, to: category, kind: has_many, via: categories}
+  - {from: post, to: tag, kind: has_many, via: tags}
+  - {from: post, to: comment, kind: has_many, via: 'comment.post'}
+  - {from: post, to: post, kind: has_many, via: 'revisions (/wp-json/wp/v2/posts/{id}/revisions)'}
+  - {from: page, to: page, kind: belongs_to, via: parent}
+  - {from: page, to: user, kind: belongs_to, via: author}
+  - {from: page, to: media, kind: has_one, via: featured_media}
+  - {from: media, to: post, kind: belongs_to, via: post}
+  - {from: media, to: user, kind: belongs_to, via: author}
+  - {from: category, to: category, kind: belongs_to, via: parent}
+  - {from: comment, to: comment, kind: belongs_to, via: parent}
+  - {from: comment, to: post, kind: belongs_to, via: post}
+  - {from: ability, to: ability_category, kind: belongs_to, via: category}
+id_conventions:
+  content: Auto-increment integers; also addressable by `slug` via the `slug` query filter.
+  taxonomy_and_type: String slugs (`category`, `post_tag`, `post`, `page`).
+  ability: 'Namespaced string of the form `namespace/ability-name` (route regex [a-zA-Z0-9\-\/]+).'
+hypermedia:
+  detail: >-
+    Every entity carries a `_links` object naming self, collection, about, author, replies,
+    version-history, wp:featuredmedia, wp:attachment and wp:term relations. Adding `_embed` to a
+    request inlines those linked resources — the traversal path for the graph above.
+render: null
