@@ -32,28 +32,76 @@ tags:
 - Model Context Protocol
 - WordPress
 apis:
-- name: A2 Biotherapeutics WordPress REST API
+- aid: a2-biotherapeutics:a2-biotherapeutics-mcp-api
+  name: A2 Biotherapeutics MCP API
   description: >-
-    The live WordPress REST API served by the A2 Biotherapeutics corporate website. Route discovery is
-    anonymous and advertises 298 routes across 16 namespaces; published content under wp/v2 (posts,
-    pages, media, taxonomies) is readable without credentials, while writes, the WordPress Abilities
-    registry and the MCP namespace are gated. This is the content-management API of the marketing
-    site, not a therapeutic or research API. The OpenAPI in this repo is derived by API Evangelist
-    from the provider's own live route-discovery document; A2 Bio publishes no OpenAPI itself.
+    Model Context Protocol servers exposed by the WordPress MCP adapter. Both servers require OAuth 2.1
+    bearer auth (observed HTTP 401 anonymously).
   humanURL: https://www.a2bio.com/wp-json/
   baseURL: https://www.a2bio.com/wp-json/
   tags:
-  - WordPress
-  - Content
-  - Newsroom
-  - Model Context Protocol
+  - mcp
   properties:
   - type: OpenAPI
-    url: openapi/a2-biotherapeutics-wp-rest-openapi.yml
-  - type: Overlay
-    url: overlays/a2-biotherapeutics-wp-rest-overlay.yaml
-  - type: MCPServer
-    url: mcp/a2-biotherapeutics-mcp.yml
+    url: openapi/a2-biotherapeutics-mcp-api-openapi.yml
+  - type: ToolCrosswalk
+    url: mcp/a2-biotherapeutics-tool-crosswalk.yml
+  - type: DataModel
+    url: data-model/a2-biotherapeutics-data-model.yml
+- aid: a2-biotherapeutics:a2-biotherapeutics-oembed-1-0-api
+  name: A2 Biotherapeutics Oembed/1.0 API
+  description: oEmbed discovery and proxy endpoints.
+  humanURL: https://www.a2bio.com/wp-json/
+  baseURL: https://www.a2bio.com/wp-json/
+  tags:
+  - oembed/1.0
+  properties:
+  - type: OpenAPI
+    url: openapi/a2-biotherapeutics-oembed-1-0-api-openapi.yml
+  - type: ToolCrosswalk
+    url: mcp/a2-biotherapeutics-tool-crosswalk.yml
+  - type: DataModel
+    url: data-model/a2-biotherapeutics-data-model.yml
+- aid: a2-biotherapeutics:a2-biotherapeutics-root-api
+  name: A2 Biotherapeutics Root API
+  description: REST API index / namespace discovery.
+  humanURL: https://www.a2bio.com/wp-json/
+  baseURL: https://www.a2bio.com/wp-json/
+  tags:
+  - root
+  properties:
+  - type: OpenAPI
+    url: openapi/a2-biotherapeutics-root-api-openapi.yml
+  - type: ToolCrosswalk
+    url: mcp/a2-biotherapeutics-tool-crosswalk.yml
+  - type: DataModel
+    url: data-model/a2-biotherapeutics-data-model.yml
+- aid: a2-biotherapeutics:a2-biotherapeutics-wp-abilities-v1-api
+  name: A2 Biotherapeutics Wp Abilities/v1 API
+  description: >-
+    WordPress Abilities API — registry of named abilities an agent may discover and run. Read access is
+    capability-gated (observed HTTP 401 anonymously).
+  humanURL: https://www.a2bio.com/wp-json/
+  baseURL: https://www.a2bio.com/wp-json/
+  tags:
+  - wp-abilities/v1
+  properties:
+  - type: OpenAPI
+    url: openapi/a2-biotherapeutics-wp-abilities-v1-api-openapi.yml
+  - type: ToolCrosswalk
+    url: mcp/a2-biotherapeutics-tool-crosswalk.yml
+  - type: DataModel
+    url: data-model/a2-biotherapeutics-data-model.yml
+- aid: a2-biotherapeutics:a2-biotherapeutics-wp-v2-api
+  name: A2 Biotherapeutics Wp/v2 API
+  description: WordPress core content API (posts, pages, media, taxonomies, users, settings).
+  humanURL: https://www.a2bio.com/wp-json/
+  baseURL: https://www.a2bio.com/wp-json/
+  tags:
+  - wp/v2
+  properties:
+  - type: OpenAPI
+    url: openapi/a2-biotherapeutics-wp-v2-api-openapi.yml
   - type: ToolCrosswalk
     url: mcp/a2-biotherapeutics-tool-crosswalk.yml
   - type: DataModel
@@ -87,7 +135,7 @@ common:
 - type: SecondaryMarket
   url: https://forgeglobal.com/a2-biotherapeutics_stock/
 - type: OpenAPI
-  url: openapi/a2-biotherapeutics-wp-rest-openapi.yml
+  url: openapi/_original/a2-biotherapeutics-wp-rest-openapi.yml
 - type: Overlay
   url: overlays/a2-biotherapeutics-wp-rest-overlay.yaml
 - type: MCPServer
