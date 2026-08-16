@@ -2,6 +2,13 @@
   "repo": "a2-biotherapeutics",
   "feeds": [
     {
+      "source": "https://www.a2bio.com/feed/",
+      "feed_url": "https://www.a2bio.com/feed/",
+      "title": "",
+      "saved": 0,
+      "method": "feed"
+    },
+    {
       "source": "https://www.a2bio.com/newsroom/",
       "feed_url": "https://www.a2bio.com/feed/",
       "title": "",
@@ -9,6 +16,6 @@
       "method": "discovered"
     }
   ],
-  "post_count": 0,
-  "fetched": "2026-08-06T14:08:46Z"
+  "post_count": 10,
+  "fetched": "2026-08-15T12:22:01Z"
 }
