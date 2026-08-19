@@ -1,0 +1,426 @@
+openapi: 3.2.0
+info:
+  title: A2 Biotherapeutics WordPress REST Wp Abilities/v1 API
+  version: wp/v2
+  summary: The live WordPress REST API served by the A2 Biotherapeutics corporate website.
+  description: 'Derived verbatim from the route-discovery document the A2 Biotherapeutics web server publishes at https://www.a2bio.com/wp-json/ (fetched 2026-08-02, HTTP 200). Every path, method, parameter name, type, default and enum in this document was read from that live response; nothing was invented.
+
+
+    This is the content-management API of the corporate marketing site, not a therapeutic, clinical or research product API. A2 Biotherapeutics is a clinical-stage cell-therapy company and publishes no developer product API. The surface is included because it is a real, live, self-describing HTTP contract on the provider''s own host, and because the same WordPress install also exposes two Model Context Protocol servers under the `mcp` namespace (see mcp/a2-biotherapeutics-mcp.yml).
+
+
+    Only the WordPress core namespaces are represented (`wp/v2`, `wp-abilities/v1`, `mcp`, `oembed/1.0`). Third-party plugin namespaces advertised by the same discovery document (yoast/v1, cky/v1, redirection/v1, wordfence/v1, wp-rocket/v1, userway/v1, smart-slider-3/v1, ajaxselect2/v1, duplicate-post/v1, wp-site-health/v1, wp-block-editor/v1) are intentionally excluded as vendor plugin internals.'
+  x-derived-from: https://www.a2bio.com/wp-json/
+  x-derived-on: '2026-08-02'
+  x-apievangelist-method: derived
+servers:
+- url: https://www.a2bio.com
+  description: Production
+tags:
+- name: wp-abilities/v1
+  description: WordPress Abilities API — registry of named abilities an agent may discover and run. Read access is capability-gated (observed HTTP 401 anonymously).
+paths:
+  /wp-json/wp-abilities/v1:
+    get:
+      operationId: getWpAbilitiesV1
+      summary: GET /wp-abilities/v1
+      description: WordPress REST API route `/wp-abilities/v1` in namespace `wp-abilities/v1`, as advertised by the live route-discovery document at https://www.a2bio.com/wp-json/.
+      tags:
+      - wp-abilities/v1
+      parameters:
+      - name: namespace
+        in: query
+        schema:
+          default: wp-abilities/v1
+      - name: context
+        in: query
+        schema:
+          default: view
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema: {}
+        '401':
+          description: Authentication required or capability missing
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+        '404':
+          description: No route or resource found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+  /wp-json/wp-abilities/v1/abilities:
+    get:
+      operationId: getWpAbilitiesV1Abilities
+      summary: GET /wp-abilities/v1/abilities
+      description: WordPress REST API route `/wp-abilities/v1/abilities` in namespace `wp-abilities/v1`, as advertised by the live route-discovery document at https://www.a2bio.com/wp-json/.
+      tags:
+      - wp-abilities/v1
+      parameters:
+      - name: context
+        in: query
+        schema:
+          type: string
+          enum:
+          - view
+          - embed
+          - edit
+          default: view
+        description: Scope under which the request is made; determines fields present in response.
+      - name: page
+        in: query
+        schema:
+          type: integer
+          default: 1
+        description: Current page of the collection.
+      - name: per_page
+        in: query
+        schema:
+          type: integer
+          default: 50
+        description: Maximum number of items to be returned in result set.
+      - name: category
+        in: query
+        schema:
+          type: string
+        description: Limit results to abilities in specific ability category.
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema: {}
+        '401':
+          description: Authentication required or capability missing
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+        '404':
+          description: No route or resource found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+  /wp-json/wp-abilities/v1/abilities/{name}:
+    parameters:
+    - name: name
+      in: path
+      required: true
+      schema:
+        type: string
+    get:
+      operationId: getWpAbilitiesV1AbilitiesByName
+      summary: GET /wp-abilities/v1/abilities/(?P<name>[a-zA-Z0-9\-\/]+)
+      description: WordPress REST API route `/wp-abilities/v1/abilities/(?P<name>[a-zA-Z0-9\-\/]+)` in namespace `wp-abilities/v1`, as advertised by the live route-discovery document at https://www.a2bio.com/wp-json/.
+      tags:
+      - wp-abilities/v1
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema: {}
+        '401':
+          description: Authentication required or capability missing
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+        '404':
+          description: No route or resource found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+  /wp-json/wp-abilities/v1/abilities/{name}/run:
+    parameters:
+    - name: name
+      in: path
+      required: true
+      schema:
+        type: string
+    get:
+      operationId: getWpAbilitiesV1AbilitiesByNameRun
+      summary: GET /wp-abilities/v1/abilities/(?P<name>[a-zA-Z0-9\-\/]+?)/run
+      description: WordPress REST API route `/wp-abilities/v1/abilities/(?P<name>[a-zA-Z0-9\-\/]+?)/run` in namespace `wp-abilities/v1`, as advertised by the live route-discovery document at https://www.a2bio.com/wp-json/.
+      tags:
+      - wp-abilities/v1
+      parameters:
+      - name: input
+        in: query
+        schema:
+          type: integer
+        description: Input parameters for the ability execution.
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema: {}
+        '401':
+          description: Authentication required or capability missing
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+        '404':
+          description: No route or resource found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+    post:
+      operationId: postWpAbilitiesV1AbilitiesByNameRun
+      summary: POST /wp-abilities/v1/abilities/(?P<name>[a-zA-Z0-9\-\/]+?)/run
+      description: WordPress REST API route `/wp-abilities/v1/abilities/(?P<name>[a-zA-Z0-9\-\/]+?)/run` in namespace `wp-abilities/v1`, as advertised by the live route-discovery document at https://www.a2bio.com/wp-json/.
+      tags:
+      - wp-abilities/v1
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                input:
+                  type: integer
+                  description: Input parameters for the ability execution.
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema: {}
+        '401':
+          description: Authentication required or capability missing
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+        '404':
+          description: No route or resource found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+    put:
+      operationId: putWpAbilitiesV1AbilitiesByNameRun
+      summary: PUT /wp-abilities/v1/abilities/(?P<name>[a-zA-Z0-9\-\/]+?)/run
+      description: WordPress REST API route `/wp-abilities/v1/abilities/(?P<name>[a-zA-Z0-9\-\/]+?)/run` in namespace `wp-abilities/v1`, as advertised by the live route-discovery document at https://www.a2bio.com/wp-json/.
+      tags:
+      - wp-abilities/v1
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                input:
+                  type: integer
+                  description: Input parameters for the ability execution.
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema: {}
+        '401':
+          description: Authentication required or capability missing
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+        '404':
+          description: No route or resource found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+    patch:
+      operationId: patchWpAbilitiesV1AbilitiesByNameRun
+      summary: PATCH /wp-abilities/v1/abilities/(?P<name>[a-zA-Z0-9\-\/]+?)/run
+      description: WordPress REST API route `/wp-abilities/v1/abilities/(?P<name>[a-zA-Z0-9\-\/]+?)/run` in namespace `wp-abilities/v1`, as advertised by the live route-discovery document at https://www.a2bio.com/wp-json/.
+      tags:
+      - wp-abilities/v1
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                input:
+                  type: integer
+                  description: Input parameters for the ability execution.
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema: {}
+        '401':
+          description: Authentication required or capability missing
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+        '404':
+          description: No route or resource found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+    delete:
+      operationId: deleteWpAbilitiesV1AbilitiesByNameRun
+      summary: DELETE /wp-abilities/v1/abilities/(?P<name>[a-zA-Z0-9\-\/]+?)/run
+      description: WordPress REST API route `/wp-abilities/v1/abilities/(?P<name>[a-zA-Z0-9\-\/]+?)/run` in namespace `wp-abilities/v1`, as advertised by the live route-discovery document at https://www.a2bio.com/wp-json/.
+      tags:
+      - wp-abilities/v1
+      parameters:
+      - name: input
+        in: query
+        schema:
+          type: integer
+        description: Input parameters for the ability execution.
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema: {}
+        '401':
+          description: Authentication required or capability missing
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+        '404':
+          description: No route or resource found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+  /wp-json/wp-abilities/v1/categories:
+    get:
+      operationId: getWpAbilitiesV1Categories
+      summary: GET /wp-abilities/v1/categories
+      description: WordPress REST API route `/wp-abilities/v1/categories` in namespace `wp-abilities/v1`, as advertised by the live route-discovery document at https://www.a2bio.com/wp-json/.
+      tags:
+      - wp-abilities/v1
+      parameters:
+      - name: context
+        in: query
+        schema:
+          type: string
+          enum:
+          - view
+          - embed
+          - edit
+          default: view
+        description: Scope under which the request is made; determines fields present in response.
+      - name: page
+        in: query
+        schema:
+          type: integer
+          default: 1
+        description: Current page of the collection.
+      - name: per_page
+        in: query
+        schema:
+          type: integer
+          default: 50
+        description: Maximum number of items to be returned in result set.
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema: {}
+        '401':
+          description: Authentication required or capability missing
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+        '404':
+          description: No route or resource found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+  /wp-json/wp-abilities/v1/categories/{slug}*):
+    parameters:
+    - name: slug
+      in: path
+      required: true
+      schema:
+        type: string
+    get:
+      operationId: getWpAbilitiesV1CategoriesBySlug
+      summary: GET /wp-abilities/v1/categories/(?P<slug>[a-z0-9]+(?:-[a-z0-9]+)*)
+      description: WordPress REST API route `/wp-abilities/v1/categories/(?P<slug>[a-z0-9]+(?:-[a-z0-9]+)*)` in namespace `wp-abilities/v1`, as advertised by the live route-discovery document at https://www.a2bio.com/wp-json/.
+      tags:
+      - wp-abilities/v1
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema: {}
+        '401':
+          description: Authentication required or capability missing
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+        '404':
+          description: No route or resource found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+components:
+  schemas:
+    WPError:
+      type: object
+      description: The WordPress REST API error envelope, observed verbatim on live 401 responses from this host. Not RFC 9457 problem+json.
+      properties:
+        code:
+          type: string
+          examples:
+          - rest_forbidden
+          - mcp_unauthorized
+        message:
+          type: string
+          examples:
+          - Sorry, you are not allowed to do that.
+        data:
+          type: object
+          properties:
+            status:
+              type: integer
+              examples:
+              - 401
+  securitySchemes:
+    mcpOAuth2:
+      type: oauth2
+      description: OAuth 2.1 authorization-code + PKCE, as advertised by the provider's RFC 8414 metadata at https://www.a2bio.com/.well-known/oauth-authorization-server (fetched 2026-08-02, HTTP 200). Guards the `mcp` namespace; the protected-resource metadata (RFC 9728) names https://www.a2bio.com/wp-json/mcp/mcp-oauth-server.
+      flows:
+        authorizationCode:
+          authorizationUrl: https://www.a2bio.com/oauth/authorize
+          tokenUrl: https://www.a2bio.com/oauth/token
+          refreshUrl: https://www.a2bio.com/oauth/token
+          scopes:
+            mcp: Access the site's Model Context Protocol server.
+    wpNonce:
+      type: apiKey
+      in: header
+      name: X-WP-Nonce
+      description: WordPress cookie-authentication nonce. Advertised by the live server in its Access-Control-Allow-Headers response header (Authorization, X-WP-Nonce, Content-Disposition, Content-MD5, Content-Type).

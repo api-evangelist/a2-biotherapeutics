@@ -1,0 +1,107 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "A2 Biotherapeutics WordPress REST MCP API",
+    "version": "wp/v2"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "mcp",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "GET /mcp",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.a2bio.com/wp-json/mcp",
+            "params": [
+              {
+                "name": "namespace",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "context",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "WordPress REST API route `/mcp` in namespace `mcp`, as advertised by the live route-discovery document at https://www.a2bio.com/wp-json/."
+        },
+        {
+          "info": {
+            "name": "GET /mcp/mcp-adapter-default-server",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.a2bio.com/wp-json/mcp/mcp-adapter-default-server"
+          },
+          "docs": "WordPress REST API route `/mcp/mcp-adapter-default-server` in namespace `mcp`, as advertised by the live route-discovery document at https://www.a2bio.com/wp-json/."
+        },
+        {
+          "info": {
+            "name": "POST /mcp/mcp-adapter-default-server",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://www.a2bio.com/wp-json/mcp/mcp-adapter-default-server"
+          },
+          "docs": "WordPress REST API route `/mcp/mcp-adapter-default-server` in namespace `mcp`, as advertised by the live route-discovery document at https://www.a2bio.com/wp-json/."
+        },
+        {
+          "info": {
+            "name": "DELETE /mcp/mcp-adapter-default-server",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://www.a2bio.com/wp-json/mcp/mcp-adapter-default-server"
+          },
+          "docs": "WordPress REST API route `/mcp/mcp-adapter-default-server` in namespace `mcp`, as advertised by the live route-discovery document at https://www.a2bio.com/wp-json/."
+        },
+        {
+          "info": {
+            "name": "GET /mcp/mcp-oauth-server",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.a2bio.com/wp-json/mcp/mcp-oauth-server"
+          },
+          "docs": "WordPress REST API route `/mcp/mcp-oauth-server` in namespace `mcp`, as advertised by the live route-discovery document at https://www.a2bio.com/wp-json/."
+        },
+        {
+          "info": {
+            "name": "POST /mcp/mcp-oauth-server",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://www.a2bio.com/wp-json/mcp/mcp-oauth-server"
+          },
+          "docs": "WordPress REST API route `/mcp/mcp-oauth-server` in namespace `mcp`, as advertised by the live route-discovery document at https://www.a2bio.com/wp-json/."
+        },
+        {
+          "info": {
+            "name": "DELETE /mcp/mcp-oauth-server",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://www.a2bio.com/wp-json/mcp/mcp-oauth-server"
+          },
+          "docs": "WordPress REST API route `/mcp/mcp-oauth-server` in namespace `mcp`, as advertised by the live route-discovery document at https://www.a2bio.com/wp-json/."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

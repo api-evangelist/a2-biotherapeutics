@@ -2,66 +2,67 @@ generated: '2026-08-02'
 method: probed
 status: published
 source: https://www.a2bio.com/wp-json/mcp
-summary: >-
-  A2 Biotherapeutics' corporate WordPress site exposes two live Model Context Protocol servers under
-  the `mcp` REST namespace, guarded by an OAuth 2.1 authorization server the same host advertises via
-  RFC 8414 / RFC 9728 metadata. This is a site-CMS MCP surface produced by the WordPress MCP adapter,
-  not a therapeutic, clinical or research product server — A2 Bio is a clinical-stage cell-therapy
-  company and publishes no developer product API. Both servers were probed anonymously on 2026-08-02
-  and both returned HTTP 401, so the live tool set could not be enumerated. No tool list is recorded
-  below because none was observed; nothing is inferred.
+summary: A2 Biotherapeutics' corporate WordPress site exposes two live Model Context Protocol servers
+  under the `mcp` REST namespace, guarded by an OAuth 2.1 authorization server the same host advertises
+  via RFC 8414 / RFC 9728 metadata. This is a site-CMS MCP surface produced by the WordPress MCP adapter,
+  not a therapeutic, clinical or research product server — A2 Bio is a clinical-stage cell-therapy company
+  and publishes no developer product API. Both servers were probed anonymously on 2026-08-02 and both
+  returned HTTP 401, so the live tool set could not be enumerated. No tool list is recorded below because
+  none was observed; nothing is inferred.
 servers:
-  - name: mcp-oauth-server
-    transport: http
-    url: https://www.a2bio.com/wp-json/mcp/mcp-oauth-server
-    methods: [POST, GET, DELETE]
-    auth:
-      type: oauth2
-      scheme: Bearer
-      scopes: [mcp]
-      authorization_server: https://www.a2bio.com
-      protected_resource_metadata: https://www.a2bio.com/.well-known/oauth-protected-resource
-      authorization_endpoint: https://www.a2bio.com/oauth/authorize
-      token_endpoint: https://www.a2bio.com/oauth/token
-      revocation_endpoint: https://www.a2bio.com/oauth/revoke
-      pkce: S256
-      client_registration: client_id_metadata_document
-    probe:
-      method: POST
-      body: '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
-      http_status: 401
-      body_observed: '{"code":"mcp_unauthorized","message":"MCP authentication required.","data":{"status":401}}'
-      www_authenticate: >-
-        Bearer realm="https://www.a2bio.com",
-        resource_metadata="https://www.a2bio.com/.well-known/oauth-protected-resource"
-      note: >-
-        Correct RFC 9728 challenge behaviour — the 401 names the protected-resource metadata document.
-        The live tool set requires an authenticated tools/list call; it is not published anonymously.
-  - name: mcp-adapter-default-server
-    transport: http
-    url: https://www.a2bio.com/wp-json/mcp/mcp-adapter-default-server
-    methods: [POST, GET, DELETE]
-    auth:
-      type: wordpress-capability
-      note: Gated by WordPress capability checks rather than the OAuth challenge.
-    probe:
-      method: POST
-      body: '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
-      http_status: 401
-      body_observed: '{"code":"rest_forbidden","message":"Sorry, you are not allowed to do that.","data":{"status":401}}'
+- name: mcp-oauth-server
+  transport: http
+  url: https://www.a2bio.com/wp-json/mcp/mcp-oauth-server
+  methods:
+  - POST
+  - GET
+  - DELETE
+  auth:
+    type: oauth2
+    scheme: Bearer
+    scopes:
+    - mcp
+    authorization_server: https://www.a2bio.com
+    protected_resource_metadata: https://www.a2bio.com/.well-known/oauth-protected-resource
+    authorization_endpoint: https://www.a2bio.com/oauth/authorize
+    token_endpoint: https://www.a2bio.com/oauth/token
+    revocation_endpoint: https://www.a2bio.com/oauth/revoke
+    pkce: S256
+    client_registration: client_id_metadata_document
+  probe:
+    method: POST
+    body: '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
+    http_status: 401
+    body_observed: '{"code":"mcp_unauthorized","message":"MCP authentication required.","data":{"status":401}}'
+    www_authenticate: Bearer realm="https://www.a2bio.com", resource_metadata="https://www.a2bio.com/.well-known/oauth-protected-resource"
+    note: Correct RFC 9728 challenge behaviour — the 401 names the protected-resource metadata document.
+      The live tool set requires an authenticated tools/list call; it is not published anonymously.
+- name: mcp-adapter-default-server
+  transport: http
+  url: https://www.a2bio.com/wp-json/mcp/mcp-adapter-default-server
+  methods:
+  - POST
+  - GET
+  - DELETE
+  auth:
+    type: wordpress-capability
+    note: Gated by WordPress capability checks rather than the OAuth challenge.
+  probe:
+    method: POST
+    body: '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
+    http_status: 401
+    body_observed: '{"code":"rest_forbidden","message":"Sorry, you are not allowed to do that.","data":{"status":401}}'
 tools: []
-tools_note: >-
-  Empty by design. tools/list is auth-gated on both servers, the site publishes no llms.txt and no
-  tool documentation, and the WordPress Abilities API registry
-  (/wp-json/wp-abilities/v1/abilities), which is what the MCP adapter projects into tools, also
-  returned HTTP 401 anonymously. Enumerating the tool set requires authenticated introspection.
-  Deriving a speculative tool list from the REST surface would misrepresent what this server exposes.
+tools_note: Empty by design. tools/list is auth-gated on both servers, the site publishes no llms.txt
+  and no tool documentation, and the WordPress Abilities API registry (/wp-json/wp-abilities/v1/abilities),
+  which is what the MCP adapter projects into tools, also returned HTTP 401 anonymously. Enumerating the
+  tool set requires authenticated introspection. Deriving a speculative tool list from the REST surface
+  would misrepresent what this server exposes.
 related:
   abilities_registry:
     url: https://www.a2bio.com/wp-json/wp-abilities/v1/abilities
     http_status: 401
-    note: >-
-      WordPress Abilities API (wp-abilities/v1) — the named-ability registry the MCP adapter binds
+    note: WordPress Abilities API (wp-abilities/v1) — the named-ability registry the MCP adapter binds
       tools to. Routes are advertised in the public discovery document but read access is gated.
 x-evidence:
   fetched: '2026-08-02'
@@ -70,6 +71,13 @@ x-evidence:
     http_status: 200
     content_type: application/json
   routes_observed:
-    - /mcp
-    - /mcp/mcp-oauth-server
-    - /mcp/mcp-adapter-default-server
+  - /mcp
+  - /mcp/mcp-oauth-server
+  - /mcp/mcp-adapter-default-server
+deployment:
+  mode: remote
+  endpoint: https://www.a2bio.com/wp-json/mcp/mcp-oauth-server
+  verified: probed
+  probe: gated
+  checked: '2026-08-12'
+  source: catalog MCP census

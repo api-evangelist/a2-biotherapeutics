@@ -1,0 +1,194 @@
+openapi: 3.2.0
+info:
+  title: A2 Biotherapeutics WordPress REST Oembed/1.0 API
+  version: wp/v2
+  summary: The live WordPress REST API served by the A2 Biotherapeutics corporate website.
+  description: 'Derived verbatim from the route-discovery document the A2 Biotherapeutics web server publishes at https://www.a2bio.com/wp-json/ (fetched 2026-08-02, HTTP 200). Every path, method, parameter name, type, default and enum in this document was read from that live response; nothing was invented.
+
+
+    This is the content-management API of the corporate marketing site, not a therapeutic, clinical or research product API. A2 Biotherapeutics is a clinical-stage cell-therapy company and publishes no developer product API. The surface is included because it is a real, live, self-describing HTTP contract on the provider''s own host, and because the same WordPress install also exposes two Model Context Protocol servers under the `mcp` namespace (see mcp/a2-biotherapeutics-mcp.yml).
+
+
+    Only the WordPress core namespaces are represented (`wp/v2`, `wp-abilities/v1`, `mcp`, `oembed/1.0`). Third-party plugin namespaces advertised by the same discovery document (yoast/v1, cky/v1, redirection/v1, wordfence/v1, wp-rocket/v1, userway/v1, smart-slider-3/v1, ajaxselect2/v1, duplicate-post/v1, wp-site-health/v1, wp-block-editor/v1) are intentionally excluded as vendor plugin internals.'
+  x-derived-from: https://www.a2bio.com/wp-json/
+  x-derived-on: '2026-08-02'
+  x-apievangelist-method: derived
+servers:
+- url: https://www.a2bio.com
+  description: Production
+tags:
+- name: oembed/1.0
+  description: oEmbed discovery and proxy endpoints.
+paths:
+  /wp-json/oembed/1.0:
+    get:
+      operationId: getOembed10
+      summary: GET /oembed/1.0
+      description: WordPress REST API route `/oembed/1.0` in namespace `oembed/1.0`, as advertised by the live route-discovery document at https://www.a2bio.com/wp-json/.
+      tags:
+      - oembed/1.0
+      parameters:
+      - name: namespace
+        in: query
+        schema:
+          default: oembed/1.0
+      - name: context
+        in: query
+        schema:
+          default: view
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema: {}
+        '401':
+          description: Authentication required or capability missing
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+        '404':
+          description: No route or resource found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+  /wp-json/oembed/1.0/embed:
+    get:
+      operationId: getOembed10Embed
+      summary: GET /oembed/1.0/embed
+      description: WordPress REST API route `/oembed/1.0/embed` in namespace `oembed/1.0`, as advertised by the live route-discovery document at https://www.a2bio.com/wp-json/.
+      tags:
+      - oembed/1.0
+      parameters:
+      - name: url
+        in: query
+        schema:
+          type: string
+          format: uri
+        required: true
+        description: The URL of the resource for which to fetch oEmbed data.
+      - name: format
+        in: query
+        schema:
+          default: json
+      - name: maxwidth
+        in: query
+        schema:
+          default: 600
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema: {}
+        '401':
+          description: Authentication required or capability missing
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+        '404':
+          description: No route or resource found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+  /wp-json/oembed/1.0/proxy:
+    get:
+      operationId: getOembed10Proxy
+      summary: GET /oembed/1.0/proxy
+      description: WordPress REST API route `/oembed/1.0/proxy` in namespace `oembed/1.0`, as advertised by the live route-discovery document at https://www.a2bio.com/wp-json/.
+      tags:
+      - oembed/1.0
+      parameters:
+      - name: url
+        in: query
+        schema:
+          type: string
+          format: uri
+        required: true
+        description: The URL of the resource for which to fetch oEmbed data.
+      - name: format
+        in: query
+        schema:
+          type: string
+          enum:
+          - json
+          - xml
+          default: json
+        description: The oEmbed format to use.
+      - name: maxwidth
+        in: query
+        schema:
+          type: integer
+          default: 600
+        description: The maximum width of the embed frame in pixels.
+      - name: maxheight
+        in: query
+        schema:
+          type: integer
+        description: The maximum height of the embed frame in pixels.
+      - name: discover
+        in: query
+        schema:
+          type: boolean
+          default: true
+        description: Whether to perform an oEmbed discovery request for unsanctioned providers.
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema: {}
+        '401':
+          description: Authentication required or capability missing
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+        '404':
+          description: No route or resource found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+components:
+  schemas:
+    WPError:
+      type: object
+      description: The WordPress REST API error envelope, observed verbatim on live 401 responses from this host. Not RFC 9457 problem+json.
+      properties:
+        code:
+          type: string
+          examples:
+          - rest_forbidden
+          - mcp_unauthorized
+        message:
+          type: string
+          examples:
+          - Sorry, you are not allowed to do that.
+        data:
+          type: object
+          properties:
+            status:
+              type: integer
+              examples:
+              - 401
+  securitySchemes:
+    mcpOAuth2:
+      type: oauth2
+      description: OAuth 2.1 authorization-code + PKCE, as advertised by the provider's RFC 8414 metadata at https://www.a2bio.com/.well-known/oauth-authorization-server (fetched 2026-08-02, HTTP 200). Guards the `mcp` namespace; the protected-resource metadata (RFC 9728) names https://www.a2bio.com/wp-json/mcp/mcp-oauth-server.
+      flows:
+        authorizationCode:
+          authorizationUrl: https://www.a2bio.com/oauth/authorize
+          tokenUrl: https://www.a2bio.com/oauth/token
+          refreshUrl: https://www.a2bio.com/oauth/token
+          scopes:
+            mcp: Access the site's Model Context Protocol server.
+    wpNonce:
+      type: apiKey
+      in: header
+      name: X-WP-Nonce
+      description: WordPress cookie-authentication nonce. Advertised by the live server in its Access-Control-Allow-Headers response header (Authorization, X-WP-Nonce, Content-Disposition, Content-MD5, Content-Type).
