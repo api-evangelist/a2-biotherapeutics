@@ -29,6 +29,18 @@ tags:
 - Pharmaceuticals
 - Clinical Trials
 - Healthcare
+- MCP
+- WordPress
+tags_raw:
+- Company
+- Biotechnology
+- Life Sciences
+- Cell Therapy
+- Immuno-Oncology
+- Oncology
+- Pharmaceuticals
+- Clinical Trials
+- Healthcare
 - Model Context Protocol
 - WordPress
 apis:
@@ -40,6 +52,8 @@ apis:
   humanURL: https://www.a2bio.com/wp-json/
   baseURL: https://www.a2bio.com/wp-json/
   tags:
+  - MCP
+  tags_raw:
   - mcp
   properties:
   - type: OpenAPI
@@ -68,6 +82,8 @@ apis:
   humanURL: https://www.a2bio.com/wp-json/
   baseURL: https://www.a2bio.com/wp-json/
   tags:
+  - Root
+  tags_raw:
   - root
   properties:
   - type: OpenAPI
