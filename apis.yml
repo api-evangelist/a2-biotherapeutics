@@ -24,6 +24,9 @@ deliveryModel:
   method: derived
 image: https://www.a2bio.com/wp-content/uploads/A2-Bio-Email-Logo-200-x-200.jpg
 url: https://raw.githubusercontent.com/api-evangelist/a2-biotherapeutics/refs/heads/main/apis.yml
+x-api-posture: no-product-api
+x-api-posture-basis: observed
+x-api-posture-note: "A2 Bio operates no developer API programme and publishes no product, clinical or research API."
 x-type: company
 x-source: harvest:secondary-market
 x-tier: enriched
