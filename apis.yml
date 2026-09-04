@@ -22,6 +22,19 @@ deliveryModel:
   - pricing
   generated: '2026-08-28'
   method: derived
+accessModel:
+  pricing: unknown
+  onboarding: self-serve
+  trial: false
+  try_now: false
+  public: false
+  label: Self-serve signup
+  confidence: low
+  source:
+  - authentication
+  - security
+  generated: '2026-09-02'
+  method: derived
 image: https://www.a2bio.com/wp-content/uploads/A2-Bio-Email-Logo-200-x-200.jpg
 url: https://raw.githubusercontent.com/api-evangelist/a2-biotherapeutics/refs/heads/main/apis.yml
 x-api-posture: no-product-api
