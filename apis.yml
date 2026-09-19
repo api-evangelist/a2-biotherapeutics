@@ -178,8 +178,6 @@ common:
   url: https://www.a2bio.com/california-compliance/
 - type: SecondaryMarket
   url: https://forgeglobal.com/a2-biotherapeutics_stock/
-- type: OpenAPI
-  url: openapi/_original/a2-biotherapeutics-wp-rest-openapi.yml
 - type: Overlay
   url: overlays/a2-biotherapeutics-wp-rest-overlay.yaml
 - type: MCPServer
