@@ -64,51 +64,120 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-A2 Biotherapeutics (A2 Bio) is a clinical-stage biotechnology company in Agoura Hills, California,
-founded in 2018 by Alexander Kamb, Michael Gallo and Paul Kang. It develops logic-gated cell therapies
-for solid tumors on its proprietary Tmod platform — a two-receptor activator/blocker design that lets
-an engineered T cell attack tumor cells which have lost an HLA allele while sparing normal cells that
-retain it.
+A2 Biotherapeutics (A2 Bio) is a clinical-stage biotechnology company headquartered in Agoura Hills, California, founded in 2018 by Alexander Kamb, Michael Gallo and Paul Kang. It develops logic-gated cell therapies for solid tumors on its proprietary Tmod platform, a two-receptor activator/blocker design that lets an engineered T cell attack tumor cells which have lost an HLA allele while sparing normal cells that retain it. A2 Bio operates no developer API programme and publishes no product, clinical or research API. It is catalogued here because its corporate website runs a live WordPress REST API with 298 discoverable routes, and because that same install exposes two Model Context Protocol servers guarded by an OAuth 2.1 authorization server the host advertises through RFC 8414 and RFC 9728 metadata.
 
-- https://www.a2bio.com/
+**Areas:** Company · Biotechnology · Life Sciences · Cell Therapy · Immuno-Oncology · Oncology · Pharmaceuticals · Clinical Trials · Healthcare · MCP · WordPress
 
-## API posture
+## A2 Biotherapeutics on APIs.io
 
-**A2 Bio runs no developer API programme.** There is no developer portal, no documentation, no SDKs,
-no CLI, no sandbox, no status page and no published OpenAPI.
+Everything profiled for A2 Biotherapeutics is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/a2-biotherapeutics/](https://apis.io/providers/a2-biotherapeutics/)** — or go straight to one of the APIs or properties below.
 
-What it does operate — verified live on 2026-08-02 — is the WordPress REST API of its corporate
-website, and two Model Context Protocol servers on the same install:
+### APIs (2)
 
-| Surface | URL | Status |
-|---|---|---|
-| REST route discovery | `https://www.a2bio.com/wp-json/` | 200 anonymous — 298 routes, 16 namespaces |
-| MCP namespace index | `https://www.a2bio.com/wp-json/mcp` | 200 anonymous |
-| MCP OAuth server | `https://www.a2bio.com/wp-json/mcp/mcp-oauth-server` | 401 — OAuth 2.1, scope `mcp` |
-| MCP adapter default server | `https://www.a2bio.com/wp-json/mcp/mcp-adapter-default-server` | 401 — capability-gated |
-| Abilities registry | `https://www.a2bio.com/wp-json/wp-abilities/v1/abilities` | 401 |
-| OAuth AS metadata (RFC 8414) | `/.well-known/oauth-authorization-server` | 200 |
-| OAuth PR metadata (RFC 9728) | `/.well-known/oauth-protected-resource` | 200 |
+- [A2 Biotherapeutics MCP API](https://apis.io/apis/a2-biotherapeutics/a2-biotherapeutics-mcp-api/) — Model Context Protocol servers exposed by the WordPress MCP adapter. Both servers require OAuth 2.1 bearer auth (observed HTTP 401 anonymously).
+- [A2 Biotherapeutics Website (WordPress REST)](https://apis.io/apis/a2-biotherapeutics/a2bio-com-website-wordpress-rest/) — The public WordPress REST API (wp-json) of the A2 Biotherapeutics website at www.a2bio.com: the route index of the site's content management system,…
 
-The MCP tool set could not be enumerated — `tools/list` is auth-gated on both servers and the
-abilities registry it projects from is gated too — so `mcp/a2-biotherapeutics-tool-crosswalk.yml`
-records zero bound tools rather than guessing at names.
+### Published properties
 
-`openapi/a2-biotherapeutics-wp-rest-openapi.yml` (136 paths, 292 operations) is **derived by API
-Evangelist** from the provider's own live route-discovery document, which is saved verbatim alongside
-it. A2 Bio publishes no OpenAPI of its own.
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
 
-## Access posture
+#### MCP servers (1)
 
-`https://www.a2bio.com/robots.txt` carries a Content Signals Policy —
-`search=yes,ai-train=no,use=reference` — declared as an express reservation of rights under Article 4
-of EU Directive 2019/790, plus named `Disallow` rules for GPTBot, ClaudeBot, Google-Extended,
-Amazonbot, Applebot-Extended and meta-externalagent. Honour it.
+Model Context Protocol servers that expose the API to agents.
 
-## Compliance
+- [a2-biotherapeutics-mcp.yml](https://apis.io/servers/a2-biotherapeutics/a2-biotherapeutics-mcp-yml/)
 
-A2 Bio publishes a genuine regulatory compliance declaration at
-https://www.a2bio.com/california-compliance/ covering the HHS OIG Compliance Program Guidance for
-Pharmaceutical Manufacturers, California Health and Safety Code §§119400–119402, and the AdvaMed Code
-of Ethics. This is pharmaceutical-sector compliance, not an information-security attestation — no SOC
-2, ISO 27001 or trust centre exists.
+#### Collections (6)
+
+Postman and Open Collection request collections.
+
+- [A2 Biotherapeutics WordPress REST MCP API](https://apis.io/collections/a2-biotherapeutics/open-a2-biotherapeutics-mcp-api/)
+- [Moved to /providers/a2-biotherapeutics/](https://apis.io/collections/a2-biotherapeutics/open-a2-biotherapeutics-oembed-1-0-api/)
+- [Moved to /providers/a2-biotherapeutics/](https://apis.io/collections/a2-biotherapeutics/open-a2-biotherapeutics-root-api/)
+- [Moved to /providers/a2-biotherapeutics/](https://apis.io/collections/a2-biotherapeutics/open-a2-biotherapeutics-wp-abilities-v1-api/)
+- [API Collection](https://apis.io/collections/a2-biotherapeutics/open-a2-biotherapeutics-wp-rest-discovery-original/)
+- [Moved to /providers/a2-biotherapeutics/](https://apis.io/collections/a2-biotherapeutics/open-a2-biotherapeutics-wp-v2-api/)
+
+#### Overlays (1)
+
+OpenAPI overlays, including conversational phrasing for each operation.
+
+- [A2 Biotherapeutics Wp Rest Overlay](https://apis.io/overlays/a2-biotherapeutics/a2-biotherapeutics-wp-rest-overlay/)
+
+#### Security (2)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [A2 Biotherapeutics Authentication](https://apis.io/security/a2-biotherapeutics/a2-biotherapeutics-authentication/)
+- [A2 Biotherapeutics Domain Security](https://apis.io/security/a2-biotherapeutics/a2-biotherapeutics-domain-security/)
+
+#### OAuth scopes (1)
+
+The permissions the API asks for.
+
+- [A2 Biotherapeutics Scopes](https://apis.io/scopes/a2-biotherapeutics/a2-biotherapeutics-scopes/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://www.a2bio.com/)
+- [Blog](https://www.a2bio.com/newsroom/)
+- [Compliance](https://www.a2bio.com/california-compliance/)
+- [Terms of service](https://www.a2bio.com/terms-of-use/)
+- [Privacy policy](https://www.a2bio.com/privacy-policy/)
+
+## API Evangelist rating
+
+**Kin Score 24.7** — emerging · rubric 0.25.0 · scored 2026-10-23
+
+| Facet | Score |
+|---|---|
+| Discoverability | 61.7 |
+| Contract quality | 16.5 |
+| Contract governance | 4.5 |
+| Operational transparency | 0.0 |
+| Developer ergonomics | 25.6 |
+| Access clarity | 28.9 |
+
+**Agent readiness 39.6** — agent-ready (gated down from agent-native)
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | — |
+| Reversibility Documented | — |
+| MCP Server | platform (partial credit) |
+| Auth Clarity | served (partial credit) |
+| Idempotency | — |
+| Error Semantics | verified |
+| OpenAPI Examples | — |
+| Rate Limit Signal | — |
+| Event Surface Described | — |
+| Agent Skills | derived (partial credit) |
+| Well Known Catalog | — |
+| Consent Identity | yes |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | served (partial credit) |
+| Protected Resource Metadata | verified |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+| Pagination Ratio | na |
+| Operation Distinctiveness | distinct |
+
+**Regulatory alignment 36.7** — Health
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/a2-biotherapeutics/](https://apis.io/providers/a2-biotherapeutics/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for A2 Biotherapeutics: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/a2-biotherapeutics/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
