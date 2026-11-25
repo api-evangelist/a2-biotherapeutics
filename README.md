@@ -98,11 +98,19 @@ Postman and Open Collection request collections.
 - [API Collection](https://apis.io/collections/a2-biotherapeutics/open-a2-biotherapeutics-wp-rest-discovery-original/)
 - [Moved to /providers/a2-biotherapeutics/](https://apis.io/collections/a2-biotherapeutics/open-a2-biotherapeutics-wp-v2-api/)
 
-#### Overlays (1)
+#### Overlays (3)
 
 OpenAPI overlays, including conversational phrasing for each operation.
 
+- [A2 Biotherapeutics Wp Abilities V1 Api Certification Overlay](https://apis.io/overlays/a2-biotherapeutics/a2-biotherapeutics-wp-abilities-v1-api-certification-overlay/)
 - [A2 Biotherapeutics Wp Rest Overlay](https://apis.io/overlays/a2-biotherapeutics/a2-biotherapeutics-wp-rest-overlay/)
+- [A2 Biotherapeutics Wp V2 Api Certification Overlay](https://apis.io/overlays/a2-biotherapeutics/a2-biotherapeutics-wp-v2-api-certification-overlay/)
+
+#### Governance rules (1)
+
+Spectral rulesets for the provider's contracts.
+
+- [A2 Biotherapeutics API Rules](https://apis.io/rules/a2-biotherapeutics/a2-biotherapeutics-rules/)
 
 #### Security (2)
 
@@ -129,18 +137,18 @@ Links to the company's own pages. This repository publishes no copy of their spe
 
 ## API Evangelist rating
 
-**Kin Score 24.7** — emerging · rubric 0.25.0 · scored 2026-10-23
+**Kin Score 27.1** — thin · rubric 0.28.1 · scored 2026-11-21
 
 | Facet | Score |
 |---|---|
 | Discoverability | 61.7 |
 | Contract quality | 16.5 |
-| Contract governance | 4.5 |
+| Contract governance | 18.2 |
 | Operational transparency | 0.0 |
 | Developer ergonomics | 25.6 |
-| Access clarity | 28.9 |
+| Access clarity | 36.2 |
 
-**Agent readiness 39.6** — agent-ready (gated down from agent-native)
+**Agent readiness 41.9** — agent-ready (gated down from agent-native)
 
 | Agent-readiness dimension | Result |
 |---|---|
@@ -156,17 +164,21 @@ Links to the company's own pages. This repository publishes no copy of their spe
 | Event Surface Described | — |
 | Agent Skills | derived (partial credit) |
 | Well Known Catalog | — |
-| Consent Identity | yes |
+| Consent Identity | signal |
 | Agent Card | — |
 | Dry Run Mode | — |
 | Delegated Identity | served (partial credit) |
 | Protected Resource Metadata | verified |
-| Dynamic Client Registration | — |
+| Dynamic Client Registration | yes |
 | Agentic Commerce | — |
 | Pagination Ratio | na |
 | Operation Distinctiveness | distinct |
+| MCP Tool Quality | na |
+| Onboarding Descriptor | — |
+| Dns Aid Index | na |
+| Markdown Negotiation | na |
 
-**Regulatory alignment 36.7** — Health
+**Regulatory alignment 32.0** — Health
 
 The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/a2-biotherapeutics/](https://apis.io/providers/a2-biotherapeutics/).
 
